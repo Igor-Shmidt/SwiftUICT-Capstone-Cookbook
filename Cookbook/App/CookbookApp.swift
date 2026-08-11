@@ -14,11 +14,7 @@ struct CookbookApp: App {
 
     var body: some Scene {
         WindowGroup {
-            // For now, just a placeholder text. We will replace this with RecipeListView later.
-            Text("Cookbook Architecture Ready!")
-                .font(.largeTitle)
-                .bold()
-                .padding()
+            RecipeListModule.build()
         }
     }
 }

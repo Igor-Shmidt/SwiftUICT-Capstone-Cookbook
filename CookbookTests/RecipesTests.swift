@@ -1,6 +1,6 @@
 //
 //  RecipesTests.swift
-//  CookBook
+//  SwiftUICT-Capstone-Cookbook
 //
 //  Created by Igor Shmidt on 10.08.2026.
 //
