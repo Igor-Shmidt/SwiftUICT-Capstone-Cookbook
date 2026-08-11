@@ -12,18 +12,46 @@ import Foundation
 struct LocalRecipeRepository: RecipeRepository {
     
     /// The local data source holding our preloaded recipes.
-    let table: [Recipe]
+    let recipesData: Recipes
+    let recipeStepsData: RecipeSteps
+    let ingredientsData: Ingredients
 
     /// Initializes the repository with a specific data source.
     /// - Parameter dataSource: The Recipes data model.
-    init(dataSource: Recipes) {
-        self.table = dataSource.table
+    init(recipesData: Recipes, recipeStepsData: RecipeSteps, ingredientsData: Ingredients) {
+        self.recipesData = recipesData
+        self.recipeStepsData = recipeStepsData
+        self.ingredientsData = ingredientsData
     }
-    
+
     /// Fetches all recipes from the local data source.
     func fetchRecipes() async throws -> [Recipe] {
         // We simply return the 'table' array from the Recipes class.
         // In the future, this is where a database fetch would happen.
-        return table
+        return recipesData.table
+    }
+
+    func fetchDetails(for recipeID: Int) async throws -> DetailedRecipe {
+        guard let recipe = recipesData.recipe(id: recipeID) else {
+            throw RecipeDetailsError.recipeNotFound
+        }
+
+        let steps = recipeStepsData.allSteps(for: recipeID)
+        if steps.isEmpty { throw RecipeDetailsError.recipeNotFound }
+
+        // Build a mapping dictionary of itemCode -> Ingredient for fast lookup
+        var ingredientsMap: [Int: Ingredient] = [:]
+        for step in steps where !step.isAction {
+            if let ingredient = ingredientsData.ingredient(id: step.itemCode) {
+                ingredientsMap[step.itemCode] = ingredient
+            }
+        }
+        if ingredientsMap.isEmpty { throw RecipeDetailsError.recipeNotFound }
+
+        return DetailedRecipe(
+            recipe: recipe,
+            steps: steps.sorted(using: KeyPathComparator(\.rowID)),
+            ingredientsMap: ingredientsMap
+        )
     }
 }

@@ -29,9 +29,12 @@ final class AppDIContainer: DIContainer {
 
     /// Provides the RecipeRepository for the application.
     var recipeRepository: RecipeRepository {
-        LocalRecipeRepository(dataSource: recipesData)
+        LocalRecipeRepository(
+            recipesData: recipesData,
+            recipeStepsData: recipeStepsData,
+            ingredientsData: ingredientsData
+        )
     }
-
 #if DEBUG // for Testing purposes
     internal init(
         recipes: Recipes? = nil,

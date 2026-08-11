@@ -14,4 +14,8 @@ protocol RecipeRepository {
     /// Fetches all available recipes.
     /// - Returns: An array of Recipe objects.
     func fetchRecipes() async throws -> [Recipe]
+
+    /// Fetches Detailed Recipe for provided Recipe Id
+    /// - Returns: `DetailedRecipe` object or throws error if not found
+    func fetchDetails(for recipeID: Int) async throws -> DetailedRecipe
 }
