@@ -18,5 +18,13 @@ protocol RecipeListBusinessLogic {
 
 /// Presentation Logic (Presenter) interface
 protocol RecipeListPresentationLogic {
-    func presentRecipes(response: RecipeListModels.FetchRecipes.Response)
+    typealias Response = RecipeListModels.FetchRecipes.Response
+    func presentRecipes(response: Response)
+}
+
+/// Display Logic (View) interface
+@MainActor
+protocol RecipeListDisplayLogic {
+    typealias ViewModel = RecipeListModels.FetchRecipes.ViewModel
+    func displayRecipes(viewModel: ViewModel)
 }
