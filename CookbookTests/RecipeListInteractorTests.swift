@@ -27,7 +27,7 @@ struct RecipeListInteractorTests {
 }
 
 extension RecipeListInteractorTests {
-    @Test("Interactor successfully fetches recipes and passes them to the presenter")
+    @Test("List Interactor successfully fetches recipes and passes them to the presenter")
     func testFetchRecipes() async throws {
         // Given: A repository and an interactor connected to a mock presenter
         
@@ -49,7 +49,7 @@ private extension RecipeListInteractorTests {
         var presentRecipesCalled = false
         var passedRecipes: [Recipe] = []
 
-        func presentRecipes(response: RecipeListModels.FetchRecipes.Response) {
+        func presentRecipes(response: Response) {
             presentRecipesCalled = true
             passedRecipes = response.recipes
         }
