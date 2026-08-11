@@ -26,16 +26,28 @@ struct RecipeListPresenterTests {
 }
 
 extension RecipeListPresenterTests {
-    @Test("Presenter formats raw recipes into view models correctly")
+    @Test("List Presenter formats raw recipes into view models correctly")
     func testPresentRecipes() async throws {
         // Given: A presenter connected to a mock view, and some raw recipe data
-
-        
         let rawRecipe = Recipe(id: 1, name: "Test Pizza", yield: 2.5, uom: .each, category: .pizza)
         let response = RecipeListModels.FetchRecipes.Response(recipes: [rawRecipe])
         
         // When: The presenter is asked to format the data
         await presenter.presentRecipes(response: response)
+
+        await withTaskGroup { group in
+            group.addTask { // Timeout task
+                try? await Task.sleep(for: .milliseconds(100))
+            }
+            group.addTask { @MainActor in
+                while (!mockView.displayRecipesCalled) {
+                    // Yield execution to allow Task @MainActor to execute
+                    await Task.yield()
+                }
+            }
+            await group.next() // wait only one task finish
+            group.cancelAll() // cancel other task
+        }
 
         // Then: The view should receive formatted view models
         await #expect(mockView.displayRecipesCalled == true)
@@ -51,9 +63,9 @@ private extension RecipeListPresenterTests {
     // A mock view to verify the 'Then' condition
     final class MockRecipeListView: RecipeListDisplayLogic {
         var displayRecipesCalled = false
-        var passedViewModel: RecipeListModels.FetchRecipes.ViewModel?
+        var passedViewModel: ViewModel?
 
-        func displayRecipes(viewModel: RecipeListModels.FetchRecipes.ViewModel) {
+        func displayRecipes(viewModel: ViewModel) {
             displayRecipesCalled = true
             passedViewModel = viewModel
         }
