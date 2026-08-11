@@ -18,7 +18,7 @@
                BlueprintIdentifier = "288A628C302A591300A770A6"
                BuildableName = "SwiftUICT-Capstone-Cookbook.app"
                BlueprintName = "SwiftUICT-Capstone-Cookbook"
-               ReferencedContainer = "container:CookBook.xcodeproj">
+               ReferencedContainer = "container:Cookbook.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -38,7 +38,7 @@
                BlueprintIdentifier = "288A6299302A591500A770A6"
                BuildableName = "SwiftUICT-Capstone-CookbookTests.xctest"
                BlueprintName = "SwiftUICT-Capstone-CookbookTests"
-               ReferencedContainer = "container:CookBook.xcodeproj">
+               ReferencedContainer = "container:Cookbook.xcodeproj">
             </BuildableReference>
          </TestableReference>
          <TestableReference
@@ -49,7 +49,7 @@
                BlueprintIdentifier = "288A62A3302A591500A770A6"
                BuildableName = "SwiftUICT-Capstone-CookBookUITests.xctest"
                BlueprintName = "SwiftUICT-Capstone-CookBookUITests"
-               ReferencedContainer = "container:CookBook.xcodeproj">
+               ReferencedContainer = "container:Cookbook.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -72,7 +72,7 @@
             BlueprintIdentifier = "288A628C302A591300A770A6"
             BuildableName = "SwiftUICT-Capstone-Cookbook.app"
             BlueprintName = "SwiftUICT-Capstone-Cookbook"
-            ReferencedContainer = "container:CookBook.xcodeproj">
+            ReferencedContainer = "container:Cookbook.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -89,7 +89,7 @@
             BlueprintIdentifier = "288A628C302A591300A770A6"
             BuildableName = "SwiftUICT-Capstone-Cookbook.app"
             BlueprintName = "SwiftUICT-Capstone-Cookbook"
-            ReferencedContainer = "container:CookBook.xcodeproj">
+            ReferencedContainer = "container:Cookbook.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

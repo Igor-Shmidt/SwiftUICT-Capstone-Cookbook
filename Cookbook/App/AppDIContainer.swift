@@ -18,11 +18,7 @@ import SwiftUI
 @MainActor
 final class AppDIContainer: DIContainer {
     /// The shared singleton instance of the DI container
-#if DEBUG
-    static var shared: DIContainer = AppDIContainer()
-#else
     static let shared: DIContainer = AppDIContainer()
-#endif
 
     // Core data models initialized
     private let recipesData: Recipes

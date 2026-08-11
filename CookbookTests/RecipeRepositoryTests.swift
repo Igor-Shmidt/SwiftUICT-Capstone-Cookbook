@@ -12,14 +12,13 @@ import Testing
 /// Test suite to verify the behavior of the RecipeRepository.
 @Suite("Recipe Repository Tests")
 struct RecipeRepositoryTests {
-    var repository: RecipeRepository
-    var mockDataSource: Recipes
+    private let repository: RecipeRepository
+    private let mockDataSource: Recipes
 
     @MainActor
     init() async {
         mockDataSource = Recipes()
-        AppDIContainer.shared = AppDIContainer(recipes: mockDataSource)
-        repository = AppDIContainer.shared.recipeRepository
+        repository = AppDIContainer(recipes: mockDataSource).recipeRepository
     }
 }
 
