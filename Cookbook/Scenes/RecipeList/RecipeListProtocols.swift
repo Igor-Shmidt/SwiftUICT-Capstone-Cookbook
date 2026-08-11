@@ -26,5 +26,6 @@ protocol RecipeListPresentationLogic {
 @MainActor
 protocol RecipeListDisplayLogic {
     typealias ViewModel = RecipeListModels.FetchRecipes.ViewModel
+
     func displayRecipes(viewModel: ViewModel)
 }
