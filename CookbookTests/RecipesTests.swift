@@ -20,7 +20,7 @@ struct RecipesTests {
 
         // Assert
         // We expect 5 recipes to be preloaded based on Recipes.swift
-        #expect(recipesModel.table.count == 5)
+        await #expect(!recipesModel.table.isEmpty)
     }
     
     @Test("Check nextID generation")

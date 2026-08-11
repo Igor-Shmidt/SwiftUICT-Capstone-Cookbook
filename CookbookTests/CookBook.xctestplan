@@ -1,0 +1,30 @@
+{
+  "configurations" : [
+    {
+      "id" : "2956B767-0C0E-4737-A0A0-A92F653A9DF6",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "performanceAntipatternCheckerEnabled" : true,
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:Cookbook.xcodeproj",
+      "identifier" : "288A628C302A591300A770A6",
+      "name" : "SwiftUICT-Capstone-Cookbook"
+    }
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:Cookbook.xcodeproj",
+        "identifier" : "288A6299302A591500A770A6",
+        "name" : "SwiftUICT-Capstone-CookbookTests"
+      }
+    }
+  ],
+  "version" : 1
+}
