@@ -25,6 +25,17 @@ struct CookbookCard<Content: View>: View {
     }
 }
 
+@ViewBuilder
+func AppIcon() -> some View {
+    ThemedIcon(symbol: "fork.knife.circle.fill", color: Color.Theme.primary)
+}
+
+@ViewBuilder
+func AppIconBig() -> some View {
+    AppIcon()
+        .font(.system(size: 90))
+}
+
 // MARK: - Interactive Components
 
 /// A button style that adds a smooth scaling animation when pressed.
