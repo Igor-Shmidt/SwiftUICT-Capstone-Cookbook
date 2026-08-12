@@ -9,12 +9,17 @@ import SwiftUI
 
 @main
 struct CookbookApp: App {
-    // Inject our global dependencies
-    let diContainer = AppDIContainer.shared
+    // Create the central Router for the app
+    @State private var router = AppRouter()
+    @State private var splashFinished = false
 
     var body: some Scene {
         WindowGroup {
-            RecipeListModule.build()
-        }
+            if splashFinished {
+                router.destination(for: .recipesList)
+            } else {
+                SplashScreenView(isFinished: $splashFinished)
+            }
+        }.environment(router)
     }
 }

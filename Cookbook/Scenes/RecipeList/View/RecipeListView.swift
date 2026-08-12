@@ -35,6 +35,8 @@ struct RecipeListView: View {
 
     let interactor: RecipeListBusinessLogic
 
+    @Environment(AppRouter.self) private var router
+
     @State var viewState: RecipeListModels.ViewState
 
     // Tracks the currently selected recipe for navigation.
@@ -47,25 +49,31 @@ struct RecipeListView: View {
                 // Apply our semantic background color
                 Color.Theme.background.ignoresSafeArea()
 
-                ScrollView {
-                    // LazyVStack is more customizable than standard List
-                    LazyVStack(spacing: 16) {
-                        ForEach(viewState.items) { item in
-                            // NavigationLink triggers stack push on iPhone and selection on iPad
-                            NavigationLink(value: item.id) {
-                                recipeRow(for: item)
+                if viewState.isLoading {
+                    ProgressView("Opening bookshelf...")
+                } else if !viewState.items.isEmpty {
+                    ScrollView {
+                        // LazyVStack is more customizable than standard List
+                        LazyVStack(spacing: 16) {
+                            ForEach(viewState.items) { item in
+                                // NavigationLink triggers stack push on iPhone and selection on iPad
+                                NavigationLink(value: item.id) {
+                                    recipeRow(for: item)
+                                }
+                                // Use the custom interactive button style we created
+                                .buttonStyle(ScaleButtonStyle())
                             }
-                            // Use the custom interactive button style we created
-                            .buttonStyle(ScaleButtonStyle())
-                        }
-                    }
-                    .padding()
+                        }.padding()
+                    }.scrollIndicators(.never)
+                } else {
+                    EmptyStateView(icon: "exclamationmark.triangle", message: "Failed to load recipes.")
                 }
             }
-            .navigationTitle("CookBook") // Named after the project comments :)
+            .navigationTitle("CookBook")
+            .navigationBarBackButtonHidden(true)
             // Navigation destination drives the stack push when running on iPhone (Compact)
             .navigationDestination(for: Int.self) { recipeId in
-                recipeDetailPlaceholder(for: recipeId)
+                recipeDetail(for: recipeId)
             }
             .task {
                 // Fetch data when the view appears (async/await ready)
@@ -74,7 +82,7 @@ struct RecipeListView: View {
         } detail: {
             // Detail area drives the split screen when running on iPad (Regular)
             if let selectedId = selectedRecipeId {
-                recipeDetailPlaceholder(for: selectedId)
+                recipeDetail(for: selectedId)
             } else {
                 // Use our empty state component from the Design System
                 EmptyStateView(
@@ -90,12 +98,8 @@ extension RecipeListView {
     typealias ViewModel = RecipeListModels.FetchRecipes.ViewModel
     /// A helper ViewBuilder for displaying detail placeholder text.
     @ViewBuilder
-    private func recipeDetailPlaceholder(for recipeId: Int) -> some View {
-        Text("Recipe ID: \(recipeId)")
-            .font(.title2)
-            .foregroundStyle(Color.Theme.secondaryText)
-            .navigationTitle("Recipe Details")
-            .navigationBarTitleDisplayMode(.inline)
+    private func recipeDetail(for recipeId: Int) -> some View {
+        router.destination(for: .recipeDetails(recipeID: recipeId))
     }
 
     /// An extracted ViewBuilder for a single recipe row to keep the body clean.
@@ -131,4 +135,5 @@ extension RecipeListView {
 // MARK: - Preview
 #Preview {
     RecipeListModule.build()
+        .environment(AppRouter())
 }
