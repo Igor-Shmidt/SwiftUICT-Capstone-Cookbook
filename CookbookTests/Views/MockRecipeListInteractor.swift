@@ -6,8 +6,7 @@
 //
 
 
-internal import Foundation
-@testable import SwiftUICT_Capstone_Cookbook
+@testable import protocol SwiftUICT_Capstone_Cookbook.RecipeListBusinessLogic
 
 final class MockRecipeListInteractor: RecipeListBusinessLogic {
     private(set) var calls: [RecipeListBusinessLogic.Request] = []

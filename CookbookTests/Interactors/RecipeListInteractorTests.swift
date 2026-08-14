@@ -7,7 +7,13 @@
 
 
 import Testing
-@testable import SwiftUICT_Capstone_Cookbook
+@testable import class      SwiftUICT_Capstone_Cookbook.AppDIContainer
+@testable import class      SwiftUICT_Capstone_Cookbook.Recipes
+@testable import class      SwiftUICT_Capstone_Cookbook.RecipeListInteractor
+@testable import protocol   SwiftUICT_Capstone_Cookbook.RecipeListBusinessLogic
+@testable import protocol   SwiftUICT_Capstone_Cookbook.RecipeListPresentationLogic
+@testable import protocol   SwiftUICT_Capstone_Cookbook.RecipeRepository
+@testable import struct     SwiftUICT_Capstone_Cookbook.Recipe
 
 @Suite("Recipe List Interactor Tests")
 struct RecipeListInteractorTests {

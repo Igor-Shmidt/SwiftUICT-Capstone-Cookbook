@@ -7,7 +7,11 @@
 
 
 import Testing
-@testable import SwiftUICT_Capstone_Cookbook // Use your actual target name here
+@testable import class      SwiftUICT_Capstone_Cookbook.AppDIContainer
+@testable import class      SwiftUICT_Capstone_Cookbook.Ingredients
+@testable import class      SwiftUICT_Capstone_Cookbook.Recipes
+@testable import class      SwiftUICT_Capstone_Cookbook.RecipeSteps
+@testable import protocol   SwiftUICT_Capstone_Cookbook.RecipeRepository
 
 /// Test suite to verify the behavior of the RecipeRepository.
 @Suite("Recipe Repository Tests")
