@@ -7,8 +7,15 @@
 
 
 internal import Foundation
-@testable import SwiftUICT_Capstone_Cookbook
 import Testing
+@testable import    class SwiftUICT_Capstone_Cookbook.RecipeListPresenter
+@testable import    protocol SwiftUICT_Capstone_Cookbook.RecipeListDisplayLogic
+@testable import    protocol SwiftUICT_Capstone_Cookbook.RecipeListPresentationLogic
+@testable import    protocol SwiftUICT_Capstone_Cookbook.RecipeRepository
+@testable import    struct SwiftUICT_Capstone_Cookbook.DetailedRecipe
+@testable import    struct SwiftUICT_Capstone_Cookbook.Ingredient
+@testable import    struct SwiftUICT_Capstone_Cookbook.Recipe
+@testable import    struct SwiftUICT_Capstone_Cookbook.RecipeStep
 
 @Suite("Recipe List Presenter Tests")
 struct RecipeListPresenterTests {
@@ -30,8 +37,8 @@ extension RecipeListPresenterTests {
     func testPresentRecipes() async throws {
         // Given: A presenter connected to a mock view, and some raw recipe data
         let rawRecipe = Recipe(id: 1, name: "Test Pizza", yield: 2.5, uom: .each, category: .pizza)
-        let response = RecipeListModels.FetchRecipes.Response(recipes: [rawRecipe])
-        
+        let response = RecipeListPresentationLogic.Response(recipes: [rawRecipe])
+
         // When: The presenter is asked to format the data
         await presenter.presentRecipes(response: response)
 

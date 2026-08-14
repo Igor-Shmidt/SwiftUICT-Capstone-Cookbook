@@ -6,9 +6,9 @@
 //
 
 import Testing
-@testable import SwiftUICT_Capstone_Cookbook
-internal import struct SwiftUI.NavigationPath
-internal import protocol SwiftUI.View
+@testable import class SwiftUICT_Capstone_Cookbook.AppRouter
+internal import struct      SwiftUI.NavigationPath
+internal import protocol    SwiftUI.View
 
 @Suite("AppRouter Tests")
 struct AppRouterTests {

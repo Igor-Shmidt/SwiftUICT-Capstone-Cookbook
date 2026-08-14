@@ -7,7 +7,14 @@
 
 
 import Testing
-@testable import SwiftUICT_Capstone_Cookbook
+@testable import    class SwiftUICT_Capstone_Cookbook.RecipeDetailsPresenter
+@testable import    protocol SwiftUICT_Capstone_Cookbook.RecipeDetailsDisplayLogic
+@testable import    protocol SwiftUICT_Capstone_Cookbook.RecipeDetailsPresentationLogic
+@testable import    protocol SwiftUICT_Capstone_Cookbook.RecipeRepository
+@testable import    struct SwiftUICT_Capstone_Cookbook.DetailedRecipe
+@testable import    struct SwiftUICT_Capstone_Cookbook.Ingredient
+@testable import    struct SwiftUICT_Capstone_Cookbook.Recipe
+@testable import 	struct SwiftUICT_Capstone_Cookbook.RecipeStep
 
 @Suite("Recipe Details Presenter Tests")
 struct RecipeDetailsPresenterTests {

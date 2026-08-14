@@ -7,7 +7,7 @@
 
 
 import Testing
-@testable import SwiftUICT_Capstone_Cookbook
+@testable import class SwiftUICT_Capstone_Cookbook.Recipes
 
 /// Test suite for the Recipes data model
 @Suite("Recipes Model Tests")

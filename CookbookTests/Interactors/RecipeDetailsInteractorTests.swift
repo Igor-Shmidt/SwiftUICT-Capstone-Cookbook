@@ -8,7 +8,13 @@
 
 internal import Foundation
 import Testing
-@testable import SwiftUICT_Capstone_Cookbook
+@testable import struct SwiftUICT_Capstone_Cookbook.DetailedRecipe
+@testable import struct SwiftUICT_Capstone_Cookbook.Recipe
+@testable import protocol SwiftUICT_Capstone_Cookbook.RecipeDetailsBusinessLogic
+@testable import protocol SwiftUICT_Capstone_Cookbook.RecipeDetailsPresentationLogic
+@testable import class SwiftUICT_Capstone_Cookbook.RecipeDetailsInteractor
+@testable import protocol SwiftUICT_Capstone_Cookbook.RecipeRepository
+@testable import class SwiftUICT_Capstone_Cookbook.RecipeSteps
 
 @Suite("Recipe Details Interactor Tests")
 struct RecipeDetailsInteractorTests {
