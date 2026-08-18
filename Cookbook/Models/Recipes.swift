@@ -49,14 +49,17 @@ class Recipes{
     
     /// Add an recipe
     /// - Parameter a complete `Recipe` object
-    func addRecipe(recipe:Recipe){
+    @discardableResult
+    func addRecipe(recipe:Recipe) -> Recipe {
         var newRecipe = recipe
         newRecipe.id = nextID
-        table.append(recipe)
+        table.append(newRecipe)
+        return newRecipe
     }
     
     /// Add an recipe by the properties of `recipe`
-    func addRecipe(id:Int! = nil, name:String,yield:Double, uom:UnitOfMeasure! = nil,category:IngredientCategory = .pizza){
+    @discardableResult
+    func addRecipe(id:Int! = nil, name:String,yield:Double, uom:UnitOfMeasure! = nil,category:IngredientCategory = .pizza) -> Recipe {
         var newID:Int
         if let id = id{
             // use the given id
@@ -68,6 +71,7 @@ class Recipes{
         //add the recipe
         let newRecipe = Recipe(id: newID, name: name, yield: yield, uom: uom, category: category)
         table.append(newRecipe)
+        return newRecipe
     }
     
 // ----- Delete methods
@@ -84,11 +88,14 @@ class Recipes{
 //----- Update methods
     
     /// Update based on a `recipe`
-    func updateRecipe(recipe:Recipe){
+    @discardableResult
+    func updateRecipe(recipe:Recipe) -> Recipe? {
         //find the index of that id, and replace the element at that index.
         if let index = table.firstIndex(where: {$0.id == recipe.id}){
             table[index] = recipe
+            return recipe
         }
+        return nil
     }
     
 //----- Find methods
@@ -143,6 +150,5 @@ class Recipes{
         self.addRecipe(id: 05, name: "Hawaiian Pizza",yield: 1,uom: .each)
     }
 }
-
 
 

@@ -7,12 +7,21 @@
 
 
 @testable import protocol SwiftUICT_Capstone_Cookbook.RecipeDetailsBusinessLogic
+@testable import enum SwiftUICT_Capstone_Cookbook.RecipeDetailsModels
 
 final class MockRecipeDetailsInteractor: RecipeDetailsBusinessLogic {
     private(set) var calls: [RecipeDetailsBusinessLogic.Request] = []
 
     func fetchDetails(request: RecipeDetailsBusinessLogic.Request) async {
         calls.append(request)
+        // Intentionally do nothing; tests will drive ViewState directly
+    }
+
+    func fetchRecipe(request: RecipeDetailsModels.FetchRecipe.Request) async {
+        // Intentionally do nothing; tests will drive ViewState directly
+    }
+
+    func saveRecipe(request: RecipeDetailsModels.SaveRecipe.Request) async {
         // Intentionally do nothing; tests will drive ViewState directly
     }
 }

@@ -10,6 +10,7 @@ internal import Foundation
 import Testing
 @testable import struct SwiftUICT_Capstone_Cookbook.DetailedRecipe
 @testable import struct SwiftUICT_Capstone_Cookbook.Recipe
+@testable import enum SwiftUICT_Capstone_Cookbook.RecipeDetailsModels
 @testable import protocol SwiftUICT_Capstone_Cookbook.RecipeDetailsBusinessLogic
 @testable import protocol SwiftUICT_Capstone_Cookbook.RecipeDetailsPresentationLogic
 @testable import class SwiftUICT_Capstone_Cookbook.RecipeDetailsInteractor
@@ -43,21 +44,45 @@ extension RecipeDetailsInteractorTests {
     struct MockRecipeDetailsRepository: RecipeRepository {
         let mockResult: DetailedRecipe
 
-        func fetchRecipes() async throws -> [Recipe] { throw CancellationError() }
+        func fetchRecipes() async throws -> [Recipe] { [mockResult.recipe] }
+
+        func fetchRecipe(for recipeID: Int) async throws -> Recipe {
+            mockResult.recipe
+        }
 
         func fetchDetails(for recipeID: Int) async throws -> DetailedRecipe {
             return mockResult
         }
+
+        func addRecipe(_ recipe: Recipe) async throws -> Recipe {
+            recipe
+        }
+
+        func updateRecipe(_ recipe: Recipe) async throws -> Recipe {
+            recipe
+        }
+
+        func deleteRecipe(id recipeID: Int) async throws {}
     }
 
     /// A mock presenter to verify that the Interactor correctly calls the presentation logic.
     final class MockRecipeDetailsPresenter: RecipeDetailsPresentationLogic {
         var presentDetailsCalled = false
+        var presentEditableRecipeCalled = false
+        var presentSavedRecipeCalled = false
         var passedResponse: Response?
 
         func presentDetails(response: Response) {
             presentDetailsCalled = true
             passedResponse = response
+        }
+
+        func presentEditableRecipe(response: RecipeDetailsModels.FetchRecipe.Response) {
+            presentEditableRecipeCalled = true
+        }
+
+        func presentSavedRecipe(response: RecipeDetailsModels.SaveRecipe.Response) {
+            presentSavedRecipeCalled = true
         }
     }
 }
@@ -87,5 +112,17 @@ extension RecipeDetailsInteractorTests {
         )
 
         await #expect(!passedResponse.steps.isEmpty)
+    }
+
+    @Test("Details Interactor saves a new recipe and passes it to the presenter")
+    func testSaveNewRecipe() async throws {
+        // Given: A new recipe request
+        let recipe = Recipe(id: -1, name: "New Pizza", yield: 1, uom: .each, category: .pizza)
+
+        // When: The interactor saves the recipe
+        await interactor.saveRecipe(request: .init(recipe: recipe, isNewRecipe: true))
+
+        // Then: The presenter must receive the saved recipe response
+        #expect(mockPresenter.presentSavedRecipeCalled)
     }
 }

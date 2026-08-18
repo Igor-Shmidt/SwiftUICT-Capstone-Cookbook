@@ -35,4 +35,16 @@ final class RecipeListInteractor: RecipeListBusinessLogic {
             print("Error fetching recipes: \(error)")
         }
     }
+
+    func deleteRecipes(request: RecipeListModels.DeleteRecipes.Request) async {
+        do {
+            for recipeID in request.recipeIDs {
+                try await repository.deleteRecipe(id: recipeID)
+            }
+
+            await fetchRecipes(request: .init())
+        } catch {
+            print("Error deleting recipes: \(error)")
+        }
+    }
 }

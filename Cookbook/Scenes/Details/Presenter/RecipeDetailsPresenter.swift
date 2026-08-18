@@ -55,4 +55,20 @@ final class RecipeDetailsPresenter: RecipeDetailsPresentationLogic {
             view?.displayDetails(viewModel: viewModel)
         }
     }
+
+    func presentEditableRecipe(response: RecipeDetailsModels.FetchRecipe.Response) {
+        let viewModel = RecipeDetailsModels.FetchRecipe.ViewModel(recipe: response)
+
+        Task { @MainActor in
+            view?.displayEditableRecipe(viewModel: viewModel)
+        }
+    }
+
+    func presentSavedRecipe(response: RecipeDetailsModels.SaveRecipe.Response) {
+        let viewModel = RecipeDetailsModels.SaveRecipe.ViewModel(recipeID: response.recipe.id)
+
+        Task { @MainActor in
+            view?.displaySavedRecipe(viewModel: viewModel)
+        }
+    }
 }

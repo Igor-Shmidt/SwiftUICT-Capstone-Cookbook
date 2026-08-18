@@ -11,6 +11,7 @@ import Testing
 @testable import    protocol SwiftUICT_Capstone_Cookbook.RecipeDetailsDisplayLogic
 @testable import    protocol SwiftUICT_Capstone_Cookbook.RecipeDetailsPresentationLogic
 @testable import    protocol SwiftUICT_Capstone_Cookbook.RecipeRepository
+@testable import    enum SwiftUICT_Capstone_Cookbook.RecipeDetailsModels
 @testable import    struct SwiftUICT_Capstone_Cookbook.DetailedRecipe
 @testable import    struct SwiftUICT_Capstone_Cookbook.Ingredient
 @testable import    struct SwiftUICT_Capstone_Cookbook.Recipe
@@ -32,11 +33,21 @@ struct RecipeDetailsPresenterTests {
 private extension RecipeDetailsPresenterTests {
     final class MockRecipeDetailsView: RecipeDetailsDisplayLogic {
         var displayDetailsCalled = false
+        var displayEditableRecipeCalled = false
+        var displaySavedRecipeCalled = false
         var displayedViewModel: ViewModel?
 
         func displayDetails(viewModel: ViewModel) {
             displayedViewModel = viewModel
             displayDetailsCalled = true
+        }
+
+        func displayEditableRecipe(viewModel: RecipeDetailsModels.FetchRecipe.ViewModel) {
+            displayEditableRecipeCalled = true
+        }
+
+        func displaySavedRecipe(viewModel: RecipeDetailsModels.SaveRecipe.ViewModel) {
+            displaySavedRecipeCalled = true
         }
     }
 }

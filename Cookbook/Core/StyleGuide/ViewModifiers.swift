@@ -44,14 +44,9 @@ private struct LiquidGlassModifier: ViewModifier {
     
     func body(content: Content) -> some View {
         content
-            .background(.ultraThinMaterial)
-            .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
-            .overlay(
-                RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                    .stroke(Color.white.opacity(0.3), lineWidth: 1)
-                    // Blend mode helps the stroke look natural in both dark and light modes
-                    .blendMode(.overlay) 
-            )
+            .glassEffect(.clear, in: RoundedRectangle(
+                cornerRadius: cornerRadius, style: .continuous
+            ))
             .shadow(color: Color.black.opacity(0.15), radius: 10, x: 0, y: 5)
     }
 }

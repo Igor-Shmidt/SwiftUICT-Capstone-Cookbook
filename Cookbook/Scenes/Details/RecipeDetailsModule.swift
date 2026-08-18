@@ -30,4 +30,23 @@ enum RecipeDetailsModule {
             viewState: viewState
         )
     }
+
+    /// Configures and returns the fully assembled Recipe Editor View.
+    /// - Parameter recipeID: The ID of the recipe to edit, or nil to create a new recipe.
+    static func buildEditor(for recipeID: Int?) -> some View {
+        let viewState = RecipeDetailsModels.ViewState()
+
+        let presenter = RecipeDetailsPresenter()
+        presenter.view = viewState
+
+        let repository = AppDIContainer.shared.recipeRepository
+        let interactor = RecipeDetailsInteractor(repository: repository)
+        interactor.presenter = presenter
+
+        return RecipeEditorView(
+            recipeID: recipeID,
+            interactor: interactor,
+            viewState: viewState
+        )
+    }
 }

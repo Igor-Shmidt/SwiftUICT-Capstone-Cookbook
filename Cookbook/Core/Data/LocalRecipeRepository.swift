@@ -31,6 +31,14 @@ struct LocalRecipeRepository: RecipeRepository {
         return recipesData.table
     }
 
+    func fetchRecipe(for recipeID: Int) async throws -> Recipe {
+        guard let recipe = recipesData.recipe(id: recipeID) else {
+            throw RecipeDetailsError.recipeNotFound
+        }
+
+        return recipe
+    }
+
     func fetchDetails(for recipeID: Int) async throws -> DetailedRecipe {
         guard let recipe = recipesData.recipe(id: recipeID) else {
             throw RecipeDetailsError.recipeNotFound
@@ -53,5 +61,21 @@ struct LocalRecipeRepository: RecipeRepository {
             steps: steps.sorted(using: KeyPathComparator(\.rowID)),
             ingredientsMap: ingredientsMap
         )
+    }
+
+    func addRecipe(_ recipe: Recipe) async throws -> Recipe {
+        recipesData.addRecipe(recipe: recipe)
+    }
+
+    func updateRecipe(_ recipe: Recipe) async throws -> Recipe {
+        guard let updatedRecipe = recipesData.updateRecipe(recipe: recipe) else {
+            throw RecipeDetailsError.recipeNotFound
+        }
+
+        return updatedRecipe
+    }
+
+    func deleteRecipe(id recipeID: Int) async throws {
+        recipesData.removeRecipe(id: recipeID)
     }
 }

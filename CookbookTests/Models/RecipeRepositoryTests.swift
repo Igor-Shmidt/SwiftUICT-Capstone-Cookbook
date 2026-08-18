@@ -12,6 +12,7 @@ import Testing
 @testable import class      SwiftUICT_Capstone_Cookbook.Recipes
 @testable import class      SwiftUICT_Capstone_Cookbook.RecipeSteps
 @testable import protocol   SwiftUICT_Capstone_Cookbook.RecipeRepository
+@testable import struct     SwiftUICT_Capstone_Cookbook.Recipe
 
 /// Test suite to verify the behavior of the RecipeRepository.
 @Suite("Recipe Repository Tests")
@@ -70,6 +71,45 @@ extension RecipeRepositoryTests {
         let mappedIngredient = await details.ingredientsMap[firstIngredientStep.itemCode]
         #expect(mappedIngredient != nil, "Ingredient mapping should exist for itemCode")
 
+    }
+
+    @Test("Repository adds, updates, and deletes recipe metadata")
+    func testRecipeMutationLifecycle() async throws {
+        // Given: A repository with local recipe data
+        let initialCount = try await repository.fetchRecipes().count
+        let draft = Recipe(id: -1, name: "Test Pizza", yield: 2, uom: .each, category: .pizza)
+
+        // When: A new recipe is added
+        let addedRecipe = try await repository.addRecipe(draft)
+
+        // Then: It gets a valid ID and appears in the fetched recipes
+        #expect(addedRecipe.id >= 0)
+        var recipes = try await repository.fetchRecipes()
+        #expect(recipes.count == initialCount + 1)
+        #expect(recipes.contains(addedRecipe))
+
+        // When: The recipe is updated
+        let updatedRecipe = Recipe(
+            id: addedRecipe.id,
+            name: "Updated Pizza",
+            yield: 4,
+            uom: .each,
+            category: .pizza
+        )
+        let savedRecipe = try await repository.updateRecipe(updatedRecipe)
+
+        // Then: The updated values are persisted
+        #expect(savedRecipe.name == "Updated Pizza")
+        let fetchedRecipe = try await repository.fetchRecipe(for: addedRecipe.id)
+        #expect(fetchedRecipe == updatedRecipe)
+
+        // When: The recipe is deleted
+        try await repository.deleteRecipe(id: addedRecipe.id)
+
+        // Then: The recipe is removed from the fetched recipes
+        recipes = try await repository.fetchRecipes()
+        #expect(recipes.count == initialCount)
+        #expect(!recipes.contains { $0.id == addedRecipe.id })
     }
 }
 

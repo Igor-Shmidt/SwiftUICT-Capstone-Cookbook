@@ -21,6 +21,8 @@ extension RecipeListModels {
         /// Indicates if the view is currently loading data.
         var isLoading: Bool = true
 
+        var isAnimating: Bool = false
+
         // MARK: - Display Logic
 
         func displayRecipes(viewModel: ViewModel) {
@@ -46,51 +48,76 @@ struct RecipeListView: View {
         // NavigationSplitView automatically handles iPad (Split) and iPhone (Stack) layouts.
         NavigationSplitView {
             ZStack {
-                // Apply our semantic background color
-                Color.Theme.background.ignoresSafeArea()
+                SkyBackground()
 
                 if viewState.isLoading {
                     ProgressView("Opening bookshelf...")
                 } else if !viewState.items.isEmpty {
-                    ScrollView {
-                        // LazyVStack is more customizable than standard List
-                        LazyVStack(spacing: 16) {
+                    List(selection: $selectedRecipeId) {
+                        Section {
                             ForEach(viewState.items) { item in
-                                // NavigationLink triggers stack push on iPhone and selection on iPad
-                                NavigationLink(value: item.id) {
-                                    recipeRow(for: item)
-                                }
-                                // Use the custom interactive button style we created
-                                .buttonStyle(ScaleButtonStyle())
+                                Button { selectedRecipeId = item.id }
+                                label: { recipeRow(for: item) }
                             }
-                        }.padding()
-                    }.scrollIndicators(.never)
+                            .onDelete(perform: deleteRecipes(at:))
+                            .buttonStyle(ScaleButtonStyle())
+                            .listRowBackground(Color.clear)
+                            .listRowSeparator(.hidden)
+                        }
+                        .animatedSlideIn(
+                            isAnimating: viewState.isAnimating,
+                            from: .bottom)
+                        .task { [viewState] in
+                            guard !viewState.isAnimating else { return }
+                            await Task.yield()
+                            viewState.isAnimating = true
+                        }
+                    }
+                    .listStyle(.plain)
+                    .scrollContentBackground(.hidden)
+                    Spacer()
                 } else {
-                    EmptyStateView(icon: "exclamationmark.triangle", message: "Failed to load recipes.")
+                    EmptyStateView(icon: "exclamationmark.triangle",
+                                   message: "Failed to load recipes.")
                 }
             }
             .navigationTitle("CookBook")
             .navigationBarBackButtonHidden(true)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    NavigationLink(value: AppRoute.recipeEditor(recipeID: nil)) {
+                        Image(systemName: "plus")
+                    }
+                    .accessibilityLabel("Add New Recipe")
+                }
+            }
             // Navigation destination drives the stack push when running on iPhone (Compact)
-            .navigationDestination(for: Int.self) { recipeId in
-                recipeDetail(for: recipeId)
+            .navigationDestination(for: AppRoute.self) { route in
+                router.destination(for: route)
             }
             .task {
                 // Fetch data when the view appears (async/await ready)
                 await interactor.fetchRecipes(request: RecipeListModels.FetchRecipes.Request())
             }
         } detail: {
-            // Detail area drives the split screen when running on iPad (Regular)
-            if let selectedId = selectedRecipeId {
-                recipeDetail(for: selectedId)
-            } else {
-                // Use our empty state component from the Design System
-                EmptyStateView(
-                    icon: "book.pages",
-                    message: "Select a recipe to view details."
-                )
+            @Bindable var router = router
+            NavigationStack(path: $router.path) {
+                // Detail area drives the split screen when running on iPad (Regular)
+                if let selectedId = selectedRecipeId {
+                    recipeDetail(for: selectedId)
+                        .navigationDestination(for: AppRoute.self) { route in
+                            router.destination(for: route)
+                        }
+                } else {
+                    // Use our empty state component from the Design System
+                    EmptyStateView(
+                        icon: "book.pages",
+                        message: "Select a recipe to view details."
+                    )
+                }
             }
         }
+        .toolbarColorScheme(.dark, for: .navigationBar)
     }
 }
     // MARK: - Subviews
@@ -100,6 +127,13 @@ extension RecipeListView {
     @ViewBuilder
     private func recipeDetail(for recipeId: Int) -> some View {
         router.destination(for: .recipeDetails(recipeID: recipeId))
+    }
+
+    private func deleteRecipes(at offsets: IndexSet) {
+        let recipeIDs = offsets.map { viewState.items[$0].id }
+        Task {
+            await interactor.deleteRecipes(request: .init(recipeIDs: recipeIDs))
+        }
     }
 
     /// An extracted ViewBuilder for a single recipe row to keep the body clean.
@@ -122,11 +156,11 @@ extension RecipeListView {
                         .font(.subheadline)
                         .foregroundStyle(Color.Theme.secondaryText)
                 }
-                
+
                 Spacer()
 
                 // Use our custom Category Tag
-                CategoryTag(text: item.categoryName, color: Color.Theme.primary)
+                CategoryTag(text: item.categoryName)
             }
         }
     }

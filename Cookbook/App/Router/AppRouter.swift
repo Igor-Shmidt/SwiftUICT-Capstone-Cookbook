@@ -12,8 +12,8 @@ import SwiftUI
 enum AppRoute: Hashable {
     case recipesList
     case recipeDetails(recipeID: Int)
+    case recipeEditor(recipeID: Int?)
     // case settings
-    // case addRecipe
 }
 
 /// The Router handles navigation state and acts as a View Factory.
@@ -34,6 +34,7 @@ final class AppRouter {
         switch route {
         case .recipesList: RecipeListModule.build()
         case let .recipeDetails(recipeID): RecipeDetailsModule.biuild(for: recipeID)
+        case let .recipeEditor(recipeID): RecipeDetailsModule.buildEditor(for: recipeID)
         }
     }
 
