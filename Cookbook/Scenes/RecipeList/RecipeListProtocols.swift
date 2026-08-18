@@ -14,6 +14,7 @@ protocol RecipeListBusinessLogic {
     typealias Response = RecipeListModels.FetchRecipes.Response
 
     func fetchRecipes(request: RecipeListModels.FetchRecipes.Request) async
+    func deleteRecipes(request: RecipeListModels.DeleteRecipes.Request) async
 }
 
 /// Presentation Logic (Presenter) interface

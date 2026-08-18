@@ -46,6 +46,19 @@ extension RecipeListInteractorTests {
         #expect(mockPresenter.passedRecipes.count == expectedCount,
                 "Presenter should receive \(expectedCount) preloaded recipes")
     }
+
+    @Test("List Interactor deletes recipes and refreshes the presented list")
+    func testDeleteRecipes() async throws {
+        // Given: A repository with preloaded recipes
+        let deletedRecipeID = 1
+
+        // When: The delete request is made
+        await interactor.deleteRecipes(request: .init(recipeIDs: [deletedRecipeID]))
+
+        // Then: The presenter should receive a refreshed list without the deleted recipe
+        #expect(mockPresenter.presentRecipesCalled, "Presenter should be called")
+        #expect(!mockPresenter.passedRecipes.contains { $0.id == deletedRecipeID })
+    }
 }
 
 // MARK: Mocks

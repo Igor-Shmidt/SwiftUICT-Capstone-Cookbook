@@ -19,9 +19,12 @@ struct CookbookCard<Content: View>: View {
     var body: some View {
         content
             .padding()
-            .background(Color.Theme.surface)
-            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-            .shadow(color: Color.black.opacity(0.08), radius: 6, x: 0, y: 3)
+            .background(
+                RoundedRectangle(cornerRadius: 16, style: .continuous)
+                    .fill(Color.Theme.background.gradient.opacity(0.6))
+                    .blur(radius: 16)
+            )
+            .liquidGlass()
     }
 }
 
@@ -58,15 +61,13 @@ struct ScaleButtonStyle: ButtonStyle {
 @ViewBuilder
 func CategoryTag(text: String, color: Color = Color.Theme.primary) -> some View {
     Text(text)
-        .font(.caption)
-        .fontWeight(.bold)
         .padding(.horizontal, 12)
         .padding(.vertical, 6)
-        // Make the background semi-transparent based on the main color
-        .background(color.opacity(0.15))
+        .liquidGlass()
+        .font(.caption)
+        .fontWeight(.bold)
         // Tint the text with the main color for contrast
         .foregroundStyle(color)
-        .clipShape(Capsule())
 }
 
 /// A beautiful placeholder for empty lists.
@@ -90,17 +91,78 @@ func EmptyStateView(icon: String, message: String) -> some View {
     .padding()
 }
 
-// MARK: - View Extensions
+struct SkyBackground: View {
+    var body: some View {
+        GeometryReader { geometry in
+            let width = min(geometry.size.width, geometry.size.height)
+            ZStack {
+                LinearGradient(
+                    colors: [
+                        Color(red: 0.05, green: 0.07, blue: 0.15),
+                        Color(red: 0.10, green: 0.14, blue: 0.26),
+                        Color(red: 0.10, green: 0.10, blue: 0.20),
+                        Color(red: 0.52, green: 0.24, blue: 0.20),
+                        Color(red: 0.91, green: 0.48, blue: 0.25)
+                    ],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
 
-extension View {
-    /// Applies the standard large button design used throughout the app.
-    func primaryButton() -> some View {
-        self
-            .font(.headline)
-            .foregroundStyle(.white)
-            .padding()
-            .frame(maxWidth: .infinity)
-            .background(Color.Theme.primary)
-            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+                RadialGradient(
+                    colors: [
+                        Color(red: 0.93, green: 0.96, blue: 1.0).opacity(0.85),
+                        Color(red: 0.72, green: 0.78, blue: 0.95).opacity(0.24),
+                        .clear
+                    ],
+                    center: UnitPoint.zero,
+                    startRadius: width * 0.4,
+                    endRadius: width * 0.8
+                )
+
+                Circle()
+                    .fill(Color(red: 0.94, green: 0.96, blue: 1.0))
+                    .frame(width: width * 0.5)
+                    .shadow(color: Color.white.opacity(0.35), radius: 18)
+                    .position(x: geometry.size.width * 0.04, y: geometry.size.height * 0.02)
+                    .blur(radius: 1)
+
+                LinearGradient(
+                    colors: [
+                        Color(red: 0.05, green: 0.07, blue: 0.15),
+                        Color(red: 0.10, green: 0.14, blue: 0.26),
+                        .clear
+                    ],
+                    startPoint: UnitPoint(x: 0.5, y: -0.05),
+                    endPoint: UnitPoint(x: 0.5, y: 0.06)
+                )
+
+                RadialGradient(
+                    colors: [
+                        Color(red: 1.0, green: 0.73, blue: 0.34).opacity(0.9),
+                        Color(red: 0.96, green: 0.33, blue: 0.23).opacity(0.5),
+                        .clear
+                    ],
+                    center: UnitPoint(x: 0.5, y: 1.08),
+                    startRadius: 0,
+                    endRadius: geometry.size.width * 0.52
+                )
+
+                Circle()
+                    .fill(
+                        LinearGradient(
+                            colors: [
+                                Color(red: 1.0, green: 0.76, blue: 0.35),
+                                Color(red: 0.97, green: 0.43, blue: 0.25)
+                            ],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                    )
+                    .frame(width: geometry.size.width * 0.5)
+                    .position(x: geometry.size.width * 0.5, y: geometry.size.height * 1 + width * 0.35)
+                    .blur(radius: 1)
+            }
+            .ignoresSafeArea()
+        }
     }
 }

@@ -27,4 +27,10 @@ enum RecipeListModels {
             let items: [RecipeItem]
         }
     }
+
+    enum DeleteRecipes {
+        struct Request {
+            let recipeIDs: [Int]
+        }
+    }
 }
